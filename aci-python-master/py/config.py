@@ -4,6 +4,6 @@
 
 # All code samples assume the config.py file is located in the same directory as the code.
 
-controller = "10.10.1.1"
-username = "admin"
-password = "correct horse battery staple"
+controller = "10.31.6.11"
+username = "aaboagye"
+password = "C227-a7fa"
