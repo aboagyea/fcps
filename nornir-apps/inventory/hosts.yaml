@@ -28,17 +28,17 @@ ASW2:
   data:
     tags:
       - access
-ASW3:
-  hostname: 192.168.153.103
+NX7710-WWC-DC1:
+  hostname: 10.31.11.253
   groups:
     - cisco-nexus
   data:
     tags:
-      - access
-DSW1:
-  hostname: 192.168.153.104
+      - distribution
+NX7710B-DC2:
+  hostname: 10.31.11.227
   groups:
-    - iosv
+    - cisco-nexus
   data:
     tags:
       - distribution

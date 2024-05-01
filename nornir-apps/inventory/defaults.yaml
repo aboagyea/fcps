@@ -1,6 +1,6 @@
 # platform: ios
-username: cisco
-password: cisco
+username: aaboagye
+password: C227-a7fa
 connection_options:
   napalm:
     extras:
