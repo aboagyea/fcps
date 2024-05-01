@@ -1,0 +1,80 @@
+inside-host1:
+  hostname: 192.168.153.179
+  groups:
+    - hosts
+inside-host2:
+  hostname: 192.168.153.180
+  groups:
+    - hosts
+dist-sw1:
+  hostname: 192.168.153.103
+  groups:
+    - New York
+  data:
+    tags:
+      - isr4400
+      - edge
+      - bgp
+      - ospf
+R4:
+  hostname: 192.168.153.104
+  groups:
+    - New York
+  data:
+    tags:
+      - isr4300
+      - bgp
+      - ospf
+R5:
+  hostname: 192.168.153.105
+  groups:
+    - New York
+  data:
+    tags:
+      - isr4400
+      - edge
+      - bgp
+      - ospf
+R6:
+  hostname: 192.168.153.106
+  groups:
+    - Lisbon
+  data:
+    tags:
+      - isr4300
+      - edge
+      - bgp
+      - eigrp
+R7:
+  hostname: 192.168.153.107
+  groups:
+    - Lisbon
+  data:
+    tags:
+      - isr4400
+      - edge
+      - eigrp
+R8:
+  hostname: 192.168.153.108
+  groups:
+    - Lisbon
+  data:
+    tags:
+      - isr4300
+      - eigrp
+R9:
+  hostname: 192.168.153.109
+  groups:
+    - Lisbon
+  data:
+    tags:
+      - isr4400
+      - eigrp
+R10:
+  hostname: 192.168.153.110
+  groups:
+    - Lisbon
+  data:
+    tags:
+      - isr4300
+      - eigrp
