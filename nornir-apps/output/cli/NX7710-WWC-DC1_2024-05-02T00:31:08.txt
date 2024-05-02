@@ -1,0 +1,3329 @@
+===== show run ======
+
+!Command: show running-config
+!Time: Thu May  2 00:31:18 2024
+
+version 7.3(5)D1(1)
+hostname WWC-DC1
+
+feature tacacs+
+feature scheduler
+feature ospf
+feature pim
+feature interface-vlan
+feature hsrp
+feature lacp
+feature dhcp
+feature vpc
+feature vtp
+
+logging level acllog 5
+logging level adbm 2
+logging level arp 4
+
+username admin password 5 $1$7zlfPDEe$Vx0qASGrc/P127m00Rond/  role vdc-admin
+username hple password 5 $1$MZMAAt9T$hJwI1/gIEuZcQh2jryKyk0  role vdc-admin
+username hple passphrase  lifetime 99999 warntime 7
+username ssimons password 5 $1$1Hm94xpu$BcOSK5pkqoaCX.Bz.nrpG0  role vdc-admin
+username ssimons passphrase  lifetime 99999 warntime 7
+username kmurray password 5 $1$XtzxSeGT$OFZoGoX2qx6Cjpb8vaeV7/  role vdc-admin
+username kmurray passphrase  lifetime 99999 warntime 7
+username adang password 5 $1$5MJKth1/$HAOm06NAHcLP3TFlyJc5z/  role vdc-admin
+username adang passphrase  lifetime 99999 warntime 7
+username mdegraff password 5 $1$MAfH$DMFxYKlO9Z9escIxNfIta.  role vdc-admin
+username mdegraff passphrase  lifetime 99999 warntime 7
+username jdkidwell password 5 $1$MGzxGAgt$OwhJr2vz5gBROe1hwZSNc/  role vdc-admin
+username jdkidwell passphrase  lifetime 99999 warntime 7
+username rmslaughter password 5 $1$5VRR5uhQ$YBVAaC.8YC7TEa0yabtyA0  role vdc-admin
+username rmslaughter passphrase  lifetime 99999 warntime 7
+
+banner motd #
+            **************************************************************************
+               WARNING: This system is for the use of authorized clients only.
+                        All individuals utilizing computer network systems are
+                        subject to having all their activity on this computer
+                        network system monitored and recorded by system
+                        personnel.  Unauthorized access is strictly prohibited.
+                        Violators will be prosecuted to the fullest extent of the law.
+            **************************************************************************
+#
+
+no ip domain-lookup
+ip domain-name fcps.edu
+ip name-server 10.31.46.10 10.31.44.13
+tacacs-server key 7 "dywywso"
+tacacs-server host 10.31.42.145 
+tacacs-server host 10.31.43.14 
+tacacs-server host 10.31.11.145 
+tacacs-server host 10.18.65.145 
+aaa group server tacacs+ fcps 
+    server 10.31.11.145 
+    server 10.18.65.145 
+    server 10.31.42.145 
+    server 10.31.43.14 
+    use-vrf management
+    source-interface mgmt0
+service unsupported-transceiver
+ip access-list 10
+  10 permit ip 151.188.1.15/32 any 
+  20 permit ip 10.31.48.16/32 any 
+  25 permit ip 10.31.28.86/32 any 
+  30 permit ip 151.188.247.64/26 any 
+  40 permit ip 10.31.44.80/32 any 
+ip access-list 100
+  10 permit ip 10.44.97.0/24 166.94.131.130/32 
+  20 permit ip 10.44.126.0/24 166.94.131.130/32 
+  30 permit ip 10.59.224.0/24 166.94.51.211/32 
+  40 permit ip 10.44.192.0/24 166.94.51.211/32 
+ip access-list 12
+  statistics per-entry
+  10 permit ip 10.31.46.200/32 any 
+  11 permit ip 10.31.44.163/32 any 
+  20 permit ip 10.31.48.23/32 any 
+  30 permit ip 10.31.46.100/32 any 
+  40 permit ip 151.188.1.15/32 any 
+  50 permit ip 10.31.44.20/32 any 
+  60 permit ip 10.31.42.145/32 any 
+  65 permit ip 10.31.11.145/32 any 
+  66 permit ip 10.18.65.145/32 any 
+  70 permit ip 10.31.43.14/32 any 
+  75 permit ip 10.31.28.86/32 any 
+  80 permit ip 10.31.48.16/32 any 
+  85 permit ip 10.31.48.17/32 any 
+  90 permit ip 151.188.247.64/26 any 
+  95 permit ip 10.2.2.0/24 any 
+  100 permit ip 10.31.44.80/32 any 
+  110 deny ip any any log 
+ip access-list 197
+  10 permit udp any eq bootpc any eq bootps 
+  20 permit icmp any 0.0.0.0 255.255.255.224 echo 
+  30 permit ip any 10.31.48.48/32 
+  31 permit ip any 10.31.43.6/32 
+  32 permit ip any 10.31.49.34/32 
+  40 permit tcp any any eq 5228 
+  50 permit udp any any eq 5228 
+  60 permit ip any 151.188.53.249/32 
+  70 permit tcp any 151.188.24.133/32 eq www 
+  80 permit tcp any 151.188.24.133/32 eq 443 
+  90 permit esp any 151.188.24.133/32 
+  100 permit udp any 151.188.24.133/32 eq isakmp 
+  110 permit udp any 151.188.24.133/32 eq non500-isakmp 
+  120 permit udp any 151.188.24.133/32 eq 10000 
+  130 permit esp any 151.188.247.195/32 
+  140 permit udp any 151.188.247.195/32 eq isakmp 
+  150 permit udp any 151.188.247.195/32 eq non500-isakmp 
+  160 permit udp any 151.188.247.195/32 eq 10000 
+  170 deny esp any 10.0.0.0/8 
+  180 deny udp any 10.0.0.0/8 eq isakmp 
+  190 deny udp any 151.188.0.0/16 eq 10000 
+  200 permit esp any any 
+  210 permit udp any any eq isakmp 
+  220 permit udp any any eq non500-isakmp 
+  230 permit udp any any eq 10000 
+  240 permit tcp any 151.188.17.142/32 eq www 
+  250 permit tcp any 151.188.3.7/32 eq www 
+  260 permit tcp any 151.188.17.145/32 eq www 
+  270 permit tcp any 151.188.17.145/32 eq 443 
+  280 permit tcp any 151.188.17.148/32 eq www 
+  290 permit tcp any 151.188.17.148/32 eq 443 
+  300 permit tcp any 151.188.17.147/32 eq www 
+  310 permit tcp any 151.188.17.147/32 eq 443 
+  320 permit tcp any 151.188.20.34/32 eq www 
+  330 permit tcp any 151.188.20.35/32 eq www 
+  340 permit tcp any 151.188.20.36/32 eq www 
+  350 permit tcp any 151.188.20.37/32 eq www 
+  360 permit tcp any 151.188.20.38/32 eq www 
+  370 permit tcp any 151.188.20.39/32 eq www 
+  380 permit tcp any 151.188.20.45/32 eq www 
+  390 permit tcp any 151.188.20.54/32 eq www 
+  400 permit tcp any 151.188.20.61/32 eq www 
+  410 permit tcp any 151.188.20.62/32 eq www 
+  420 permit tcp any 151.188.20.34/32 eq 443 
+  430 permit tcp any 151.188.20.35/32 eq 443 
+  440 permit tcp any 151.188.20.36/32 eq 443 
+  450 permit tcp any 151.188.20.37/32 eq 443 
+  460 permit tcp any 151.188.20.38/32 eq 443 
+  470 permit tcp any 151.188.20.39/32 eq 443 
+  480 permit tcp any 10.31.48.16/32 established 
+  490 permit udp any 10.31.48.16/32 
+  500 permit tcp any 10.31.49.10/32 established 
+  510 permit udp any 10.31.49.10/32 
+  520 permit icmp any 151.188.3.1/32 
+  530 permit udp any 10.31.44.13/32 eq domain 
+  540 permit udp any 10.31.46.17/32 eq domain 
+  550 permit ip any 10.1.4.1/32 
+  560 permit tcp any 10.31.47.0/27 eq 15871 
+  570 permit tcp any 151.188.247.196/32 eq 443 
+  580 deny ip any 10.0.0.0/8 
+  590 deny ip any 151.188.0.0/16 
+  600 permit tcp any any eq 443 
+  610 permit udp any 10.31.46.10/32 eq domain 
+  620 permit tcp any 10.31.46.10/32 eq domain 
+  630 permit ip any 151.188.24.207/32 
+  640 permit tcp any 151.188.3.10/32 eq 22 
+  650 permit tcp any 151.188.3.10/32 eq www 
+  660 permit tcp any 151.188.3.10/32 eq 443 
+  670 permit tcp any 151.188.247.196/32 eq www 
+  680 permit udp any 151.188.247.196/32 eq non500-isakmp 
+  690 permit tcp any 151.188.247.215/32 eq 443 
+  700 permit tcp any 151.188.247.215/32 eq www 
+  710 permit udp any 151.188.247.215/32 eq non500-isakmp 
+  720 permit tcp any 151.188.217.155/32 eq www 
+  730 permit tcp any any eq www 
+  740 permit ip any 166.94.176.0/24 
+  750 deny ip any any 
+ip access-list 5
+  10 permit ip 10.154.17.0/24 any 
+  20 permit ip 10.154.18.0/24 any 
+  30 permit ip 151.188.18.189/29 any 
+  40 permit ip 151.188.247.64/26 any 
+  50 permit ip 151.188.8.192/26 any 
+  60 remark list to control dist of static routes into ospf
+  70 permit ip 10.24.0.0/16 any 
+  80 permit ip 10.1.12.0/24 any 
+  90 permit ip 10.2.1.0/24 any 
+  100 permit ip 10.4.0.0/25 any 
+  110 permit ip 10.5.192.0/19 any 
+  120 permit ip 10.7.0.61/32 any 
+  130 permit ip 10.7.0.252/30 any 
+  140 permit ip 10.31.0.8/30 any 
+  150 permit ip 10.31.16.0/22 any 
+  160 permit ip 10.31.20.0/24 any 
+  170 permit ip 10.31.21.0/24 any 
+  180 permit ip 10.31.22.0/24 any 
+  190 permit ip 10.31.25.1/32 any 
+  200 permit ip 10.31.26.0/23 any 
+  210 permit ip 10.31.36.0/24 any 
+  220 permit ip 10.31.37.0/24 any 
+  230 permit ip 10.31.58.0/24 any 
+  240 permit ip 10.31.59.0/24 any 
+  250 permit ip 10.31.60.0/24 any 
+  260 permit ip 10.31.70.0/24 any 
+  270 permit ip 10.31.100.8/29 any 
+  280 permit ip 10.31.100.16/28 any 
+  290 permit ip 10.31.100.32/28 any 
+  300 permit ip 10.31.100.48/28 any 
+  310 permit ip 10.31.100.64/28 any 
+  320 permit ip 10.31.100.128/30 any 
+  330 permit ip 10.31.100.160/27 any 
+  340 permit ip 10.31.100.192/27 any 
+  350 permit ip 10.31.100.224/29 any 
+  360 permit ip 10.31.101.0/24 any 
+  370 permit ip 10.31.160.0/24 any 
+  380 permit ip 10.31.200.0/27 any 
+  390 permit ip 10.31.200.32/27 any 
+  400 permit ip 10.31.200.64/26 any 
+  410 permit ip 10.40.0.187/32 any 
+  420 permit ip 10.44.224.0/19 any 
+  430 permit ip 10.72.0.187/32 any 
+  440 permit ip 10.72.0.189/32 any 
+  450 permit ip 10.76.224.0/19 any 
+  460 permit ip 10.77.32.0/19 any 
+  470 permit ip 10.128.0.0/9 any 
+  480 permit ip 146.170.68.0/26 any 
+  490 permit ip 146.170.68.24/30 any 
+  500 permit ip 146.170.100.0/26 any 
+  510 permit ip 146.170.100.24/30 any 
+  520 permit ip 151.188.0.0/25 any 
+  530 permit ip 151.188.0.128/27 any 
+  540 permit ip 151.188.2.0/24 any 
+  550 permit ip 151.188.3.128/25 any 
+  560 permit ip 151.188.6.80/28 any 
+  570 permit ip 151.188.9.0/24 any 
+  580 permit ip 151.188.16.0/26 any 
+  590 permit ip 151.188.18.48/29 any 
+  600 permit ip 151.188.18.56/29 any 
+  610 permit ip 151.188.18.72/29 any 
+  620 permit ip 151.188.18.80/28 any 
+  630 permit ip 151.188.18.160/29 any 
+  640 permit ip 151.188.20.224/27 any 
+  650 permit ip 151.188.24.192/26 any 
+  660 permit ip 151.188.53.0/25 any 
+  670 permit ip 151.188.104.128/25 any 
+  680 permit ip 151.188.120.160/27 any 
+  690 permit ip 151.188.244.0/24 any 
+  700 permit ip 151.188.247.0/26 any 
+  710 permit ip 151.188.247.192/26 any 
+  720 permit ip 151.188.250.254/32 any 
+  730 permit ip 166.94.0.0/16 any 
+  740 permit ip 192.168.204.0/24 any 
+  750 permit ip 10.24.32.0/24 any 
+  760 permit ip 10.1.38.64/26 any 
+ip access-list 6
+  10 permit ip 192.168.100.0/30 any 
+ip access-list ACVLAN19
+  statistics per-entry
+  10 permit ip 10.31.42.150/32 10.0.0.0/9 
+  20 permit ip 10.31.42.152/32 10.0.0.0/9 
+  30 permit ip 10.31.42.153/32 10.0.0.0/9 
+  40 permit ip 10.31.42.154/32 10.0.0.0/9 
+  50 permit ip 10.31.42.162/32 10.0.0.0/9 
+  60 permit ip 10.31.42.163/32 10.0.0.0/9 
+  70 permit ip 10.31.42.164/32 10.0.0.0/9 
+  80 permit ip 10.31.42.165/32 10.0.0.0/9 
+  90 permit ip 10.31.42.166/32 10.0.0.0/9 
+  200 permit ip 10.31.42.150/32 151.188.0.0/16 
+  210 permit ip 10.31.42.152/32 151.188.0.0/16 
+  220 permit ip 10.31.42.153/32 151.188.0.0/16 
+  230 permit ip 10.31.42.154/32 151.188.0.0/16 
+  240 permit ip 10.31.42.162/32 151.188.0.0/16 
+  250 permit ip 10.31.42.163/32 151.188.0.0/16 
+  260 permit ip 10.31.42.164/32 151.188.0.0/16 
+  270 permit ip 10.31.42.165/32 151.188.0.0/16 
+  280 permit ip 10.31.42.166/32 151.188.0.0/16 
+  410 deny ip 10.31.42.150/32 any 
+  420 deny ip 10.31.42.152/32 any 
+  430 deny ip 10.31.42.153/32 any 
+  440 deny ip 10.31.42.154/32 any 
+  450 deny ip 10.31.42.162/32 any 
+  460 deny ip 10.31.42.163/32 any 
+  470 deny ip 10.31.42.164/32 any 
+  480 deny ip 10.31.42.165/32 any 
+  490 deny ip 10.31.42.166/32 any 
+  600 permit ip any any 
+ip access-list ACVLAN65
+  10 permit tcp any 10.3.5.0/24 eq 443 
+  11 permit tcp 10.1.21.231/32 10.3.5.118/32 eq 389 
+  12 permit tcp 10.1.21.231/32 10.3.5.118/32 eq 636 
+  15 permit tcp any 151.188.9.66/32 eq 389 
+  16 permit tcp any 151.188.9.66/32 eq 636 
+  20 permit tcp any eq 443 10.3.5.0/24 
+  30 permit tcp any eq www 10.3.5.0/24 
+  40 permit tcp any 10.3.5.0/24 eq www 
+  50 permit udp any 10.3.5.0/24 eq domain 
+  60 permit udp any eq domain 10.3.5.0/24 
+  70 permit ip 10.1.22.254/32 10.3.5.0/24 
+  80 permit ip 10.1.30.0/28 any 
+  90 permit ip 10.1.21.231/32 any 
+  100 permit tcp 10.31.48.4/32 any eq 1389 
+  110 permit tcp 151.188.9.33/32 any eq 1521 
+  120 permit tcp 151.188.9.61/32 10.31.46.106/32 eq 8091 
+  121 permit tcp 151.188.9.100/32 10.3.5.118/32 eq 389 
+  122 permit tcp 151.188.9.100/32 10.3.5.118/32 eq 636 
+  123 permit udp 151.188.9.100/32 10.3.5.118/32 eq 389 
+  124 permit udp 151.188.9.100/32 10.3.5.118/32 eq 636 
+  125 permit tcp 151.188.9.65/32 10.3.5.15/32 eq 8090 
+  126 permit tcp 151.188.9.64/32 10.3.5.11/32 eq smtp 
+  127 permit tcp 151.188.9.65/32 10.3.5.11/32 eq smtp 
+  130 permit tcp 151.188.9.61/32 10.31.48.92/32 eq 8090 
+  140 permit tcp 151.188.9.61/32 10.31.48.96/32 eq 8091 
+  150 permit tcp 151.188.9.61/32 eq 636 10.31.48.6/32 
+  160 permit tcp 151.188.9.61/32 eq 389 10.31.48.6/32 
+  170 permit tcp 151.188.9.62/32 10.31.46.106/32 eq 8091 
+  180 permit tcp 151.188.9.62/32 10.31.48.92/32 eq 8090 
+  190 permit tcp 151.188.9.62/32 10.31.48.96/32 eq 8091 
+  200 permit tcp 151.188.9.62/32 eq 636 10.31.48.6/32 
+  210 permit tcp 151.188.9.62/32 eq 389 10.31.48.6/32 
+  220 permit tcp 151.188.9.63/32 10.31.46.106/32 eq 8091 
+  230 permit tcp 151.188.9.63/32 10.31.48.92/32 eq 8090 
+  231 permit tcp 151.188.9.66/32 10.3.5.118/32 eq 389 
+  240 permit tcp 151.188.9.63/32 10.31.48.96/32 eq 8091 
+  250 permit tcp 151.188.9.63/32 eq 636 10.31.48.6/32 
+  260 permit tcp 151.188.9.63/32 eq 389 10.31.48.6/32 
+  270 permit tcp 151.188.9.64/32 10.3.5.11/32 eq 8090 
+  280 permit tcp 151.188.9.64/32 10.3.5.13/32 eq 8090 
+  290 permit tcp 151.188.9.64/32 10.3.5.15/32 eq 8091 
+  300 permit tcp 151.188.9.64/32 eq 636 10.3.5.13/32 
+  310 permit tcp 151.188.9.64/32 eq 389 10.3.5.13/32 
+  320 permit tcp 151.188.9.65/32 10.3.5.11/32 eq 8090 
+  330 permit tcp 151.188.9.65/32 10.3.5.13/32 eq 8090 
+  340 permit tcp 151.188.9.65/32 10.3.5.15/32 eq 8091 
+  350 permit tcp 151.188.9.65/32 eq 636 10.3.5.13/32 
+  360 permit tcp 151.188.9.65/32 eq 389 10.3.5.13/32 
+  370 permit tcp 151.188.9.66/32 10.3.5.125/32 eq 8090 
+  380 permit tcp 151.188.9.66/32 10.3.5.119/32 eq 8090 
+  390 permit tcp 151.188.9.66/32 10.3.5.134/32 eq 8090 
+  400 permit tcp 151.188.9.66/32 eq 636 10.3.5.13/32 
+  401 permit tcp 151.188.9.66/32 eq 636 10.3.5.128/32 
+  402 permit tcp 151.188.9.66/32 eq 389 10.3.5.128/32 
+  410 permit tcp 151.188.9.66/32 eq 389 10.3.5.13/32 
+  420 permit tcp 151.188.9.101/32 10.3.5.15/32 eq 8090 
+  430 permit tcp 151.188.9.101/32 10.3.5.11/32 eq 8000 
+  440 permit tcp 151.188.9.101/32 10.3.5.15/32 eq 8091 
+  450 permit tcp 151.188.9.101/32 10.3.5.10/32 eq 389 
+  460 permit tcp 151.188.9.101/32 10.3.5.13/32 eq 8091 
+  470 permit tcp 151.188.9.101/32 10.3.5.11/32 eq 8090 
+  480 permit tcp 151.188.9.101/32 10.3.5.13/32 eq 8000 
+  490 permit tcp 151.188.9.101/32 10.3.5.13/32 eq 8090 
+  500 permit tcp 151.188.9.100/32 eq 389 10.3.5.128/32 
+  510 permit tcp 151.188.9.100/32 eq 636 10.3.5.128/32 
+  520 permit tcp 151.188.9.100/32 eq 8090 10.3.5.125/32 
+  530 permit tcp 151.188.9.100/32 eq 8090 10.3.5.119/32 
+  540 permit tcp 151.188.9.100/32 eq 8090 10.3.5.134/32 
+  550 permit tcp 151.188.9.100/32 10.3.5.125/32 eq 8090 
+  560 permit tcp 151.188.9.100/32 10.3.5.119/32 eq 8090 
+  570 permit tcp 151.188.9.100/32 10.3.5.134/32 eq 8090 
+  580 permit tcp 151.188.9.101/32 10.3.5.13/32 eq 443 
+  590 permit tcp 151.188.9.101/32 eq 636 10.3.5.13/32 
+  600 permit tcp 151.188.9.101/32 eq 389 10.3.5.13/32 
+  610 permit tcp 151.188.9.101/32 eq 22 10.3.5.11/32 
+  620 permit tcp 151.188.9.101/32 eq 22 10.3.5.13/32 
+  630 permit tcp 151.188.9.101/32 eq smtp 10.3.5.11/32 
+  640 permit tcp 151.188.9.101/32 10.3.5.11/32 eq smtp 
+  650 permit tcp 151.188.9.101/32 eq 389 10.3.5.11/32 
+  660 permit tcp 151.188.9.101/32 10.3.5.11/32 eq 389 
+  670 permit tcp 10.3.32.0/19 10.3.5.10/32 eq 3389 
+  680 permit tcp 10.3.32.0/19 10.3.5.11/32 eq 3389 
+  690 permit tcp 10.3.32.0/19 10.3.5.12/32 eq 3389 
+  700 permit tcp 10.3.32.0/19 10.3.5.13/32 eq 3389 
+  710 permit tcp 10.3.64.0/18 10.3.5.10/32 
+  720 permit tcp 10.3.64.0/18 10.3.5.11/32 
+  730 permit tcp 10.3.64.0/18 10.3.5.12/32 
+  760 permit tcp 10.3.64.0/18 10.3.5.15/32 
+  780 permit tcp 10.3.32.0/19 10.3.5.12/32 eq 389 
+  790 permit tcp 10.3.32.0/19 10.3.5.13/32 eq 389 
+  800 permit tcp 10.3.32.0/19 10.3.5.14/32 eq 389 
+  810 permit tcp 10.3.32.0/19 10.3.5.15/32 eq 389 
+  820 permit tcp 10.3.64.0/18 10.3.5.10/32 eq 389 
+  830 permit tcp 10.3.64.0/18 10.3.5.11/32 eq 389 
+  840 permit tcp 10.3.64.0/18 10.3.5.12/32 eq 389 
+  850 permit tcp 10.3.64.0/18 10.3.5.13/32 eq 389 
+  860 permit tcp 10.3.64.0/18 10.3.5.14/32 eq 389 
+  870 permit tcp 10.3.64.0/18 10.3.5.15/32 eq 389 
+  880 permit tcp 10.3.32.0/19 10.3.5.10/32 eq 686 
+  890 permit tcp 10.3.32.0/19 10.3.5.11/32 eq 686 
+  900 permit tcp 10.3.32.0/19 10.3.5.12/32 eq 686 
+  910 permit tcp 10.3.32.0/19 10.3.5.13/32 eq 686 
+  920 permit tcp 10.3.32.0/19 10.3.5.14/32 eq 686 
+  930 permit tcp 10.3.32.0/19 10.3.5.15/32 eq 686 
+  940 permit tcp 10.3.64.0/18 10.3.5.10/32 eq 686 
+  950 permit tcp 10.3.64.0/18 10.3.5.11/32 eq 686 
+  960 permit tcp 10.3.64.0/18 10.3.5.12/32 eq 686 
+  970 permit tcp 10.3.64.0/18 10.3.5.13/32 eq 686 
+  980 permit tcp 10.3.64.0/18 10.3.5.14/32 eq 686 
+  990 permit tcp 10.3.64.0/18 10.3.5.15/32 eq 686 
+ip access-list VLAN207-Restriction
+  10 permit udp any any eq bootps 
+  20 permit udp any any eq bootpc 
+  30 permit udp any 10.31.49.70/32 eq domain 
+  40 permit udp any 10.31.46.17/32 eq domain 
+  50 deny udp any any eq domain 
+  60 deny ip any 10.0.0.0/8 
+  70 deny ip any 151.188.0.0/16 
+  80 deny ip any 172.16.0.0/12 
+  90 permit ip any any 
+ip access-list Vlan11-acl
+  statistics per-entry
+  1 permit ip 10.31.28.131/32 10.31.11.45/32 
+  2 permit ip 10.31.42.43/32 10.31.11.90/32 
+  3 permit ip 10.31.42.44/32 10.31.11.90/32 
+  4 permit ip 10.31.43.179/32 10.31.11.90/32 
+  5 permit ip 10.31.42.44/32 10.31.11.42/32 
+  6 permit ip 10.31.49.70/32 10.31.11.0/24 
+  10 permit tcp 10.31.42.53/32 eq smtp 10.31.11.5/32 
+  20 permit ip 10.25.0.193/32 10.31.6.0/24 
+  30 remark Voip FTP server used by ACI for remote backup
+  40 permit ip 10.31.48.73/32 10.31.6.0/24 
+  50 permit ip 172.18.192.133/32 10.31.11.42/32 
+  60 permit ip 172.18.192.165/32 10.31.11.42/32 
+  65 permit ip 172.18.192.133/32 10.31.11.145/32 
+  68 permit ip 172.18.192.165/32 10.31.11.145/32 
+  70 permit ip 10.18.96.2/32 10.31.11.145/32 
+  80 permit ip 10.31.6.0/24 10.31.11.0/24 
+  85 permit ip 10.18.65.145/32 10.31.6.0/24 
+  90 permit ip 10.31.11.0/24 10.31.6.0/24 
+  100 permit ip 151.188.247.64/26 10.31.6.0/24 
+  110 permit ip 10.31.160.1/32 10.31.6.0/24 
+  120 permit ip 10.31.44.20/32 10.31.6.0/24 
+  130 permit ip 10.31.44.21/32 10.31.6.0/24 
+  140 permit ip 10.31.44.80/32 10.31.6.0/24 
+  150 permit ip 10.31.48.17/32 10.31.6.0/24 
+  160 permit ip 10.31.18.65/32 10.31.6.0/24 
+  170 permit ip 10.25.8.221/32 any 
+  180 permit udp 10.31.46.17/32 10.31.6.0/24 
+  190 permit udp 10.31.44.13/32 10.31.6.0/24 
+  200 permit ip 10.31.27.40/32 any 
+  210 remark NMS-VPN1-Subnet
+  220 permit ip 10.18.101.0/24 any 
+  230 permit ip 151.188.6.33/32 10.31.11.42/32 
+  240 remark Scrutinizer netflow
+  250 permit ip 151.188.18.186/32 10.31.11.2/32 
+  260 permit ip 151.188.0.129/32 10.31.11.1/32 
+  270 permit ip 151.188.0.163/32 10.31.11.1/32 
+  280 permit ip 10.31.167.1/32 10.31.11.1/32 
+  290 permit ip 10.31.48.8/32 10.31.11.2/32 
+  300 remark ITSD to VPN
+  309 permit tcp 10.31.30.43/32 10.31.11.90/32 eq 443 
+  310 permit tcp 10.31.103.0/24 10.31.11.90/32 eq www 
+  320 permit tcp 10.31.112.0/21 10.31.11.90/32 eq www 
+  330 permit tcp 10.31.103.0/24 10.31.11.90/32 eq 443 
+  340 permit tcp 10.31.112.0/21 10.31.11.90/32 eq 443 
+  350 permit tcp 10.31.80.0/20 10.31.11.90/32 eq www 
+  360 permit tcp 10.31.80.0/20 10.31.11.90/32 eq 443 
+  370 permit tcp 10.31.46.32/32 eq cmd 10.31.11.42/32 
+  380 permit tcp 10.31.42.53/32 eq smtp 10.31.11.42/32 
+  390 permit tcp 10.31.46.10/32 eq domain any 
+  400 permit udp 10.31.46.10/32 eq domain any 
+  410 permit tcp 10.31.46.17/32 eq domain any 
+  420 permit udp 10.31.46.17/32 eq domain any 
+  430 permit tcp 10.31.49.70/32 eq domain any 
+  440 permit udp 10.31.49.70/32 eq domain any 
+  450 remark Noc Access
+  460 permit tcp 10.31.49.56/32 10.31.11.90/32 eq 443 
+  470 permit tcp 10.31.49.78/32 10.31.11.90/32 eq 443 
+  480 permit tcp 10.31.48.19/32 10.31.11.90/32 eq 443 
+  490 permit tcp 10.1.25.176/32 10.31.11.90/32 eq 443 
+  500 remark NMS network and VPN
+  510 permit ip 151.188.247.64/26 any 
+  520 remark AAA servers
+  530 permit ip any 10.31.11.145/32 
+  540 permit ip any 10.18.65.145/32 
+  550 remark Routers loopback Ips
+  560 permit ip 151.188.250.0/24 any 
+  570 remark Monitoring system
+  580 permit ip 151.188.1.15/32 any 
+  590 permit ip 10.31.44.80/32 any 
+  600 permit ip 10.31.46.99/32 any 
+  610 permit ip 10.31.46.100/32 any 
+  620 permit ip 10.31.48.16/32 any 
+  630 permit ip 10.31.28.86/32 any 
+  640 permit ip 10.31.48.17/32 any 
+  650 permit ip 10.31.48.73/32 10.31.11.76/32 
+  660 remark Sprague 6807
+  670 permit ip 10.31.64.36/32 any 
+  680 remark Woc
+  690 permit ip 10.18.64.1/32 any 
+  700 permit ip 10.18.64.2/32 any 
+  710 permit ip 10.18.64.64/26 any 
+  720 permit ip 10.31.65.15/32 any 
+  730 remark Voip Cubes
+  740 permit ip 10.31.23.195/32 any 
+  750 permit ip 10.31.23.196/32 any 
+  760 permit ip 10.18.86.195/32 any 
+  770 permit ip 10.18.86.196/32 any 
+  780 remark Voice Gateways
+  790 permit ip 10.8.0.2/32 any 
+  800 permit ip 10.112.0.4/32 any 
+  810 permit ip 10.96.0.7/32 any 
+  820 permit ip 10.96.0.8/32 any 
+  830 permit ip 10.112.0.11/32 any 
+  840 permit ip 10.8.0.20/32 any 
+  850 permit ip 10.8.0.25/32 any 
+  860 permit ip 10.112.0.18/32 any 
+  870 permit ip 10.88.0.9/32 any 
+  880 permit ip 10.8.0.38/32 any 
+  890 permit ip 10.8.0.56/32 any 
+  900 permit ip 10.8.0.55/32 any 
+  910 permit ip 10.104.0.15/32 any 
+  920 permit ip 10.120.0.14/32 any 
+  930 permit ip 10.112.0.23/32 any 
+  940 permit ip 10.120.0.18/32 any 
+  950 permit ip 10.120.0.19/32 any 
+  960 permit ip 10.120.0.21/32 any 
+  970 permit ip 10.112.0.25/32 any 
+  980 permit ip 10.96.0.25/32 any 
+  990 permit ip 10.120.0.23/32 any 
+  1000 permit ip 10.8.0.50/32 any 
+  1010 permit ip 10.96.0.30/32 any 
+  1020 permit ip 10.92.0.7/32 any 
+  1030 permit ip 10.88.0.20/32 any 
+  1040 permit ip 10.112.0.37/32 any 
+  1050 permit ip 10.104.0.24/32 any 
+  1060 permit ip 10.96.0.36/32 any 
+  1070 permit ip 10.19.144.2/32 any 
+  1080 permit ip 10.24.33.2/32 any 
+  1090 permit ip 10.8.0.66/32 any 
+  1091 remark TenableScanners
+  1092 permit ip 10.31.42.140/32 any 
+  1093 permit ip 10.31.42.82/32 any 
+  1094 permit ip 10.31.43.115/32 any 
+  1095 permit ip 10.31.43.116/32 any 
+  1100 deny ip 10.0.0.0/8 any 
+  1110 deny ip 151.188.0.0/16 any 
+  1120 deny ip 172.16.0.0/12 any 
+  1130 permit tcp 72.163.4.38/32 any 
+  1140 permit tcp 173.37.145.8/32 any 
+  1150 permit udp any any 
+  1160 permit tcp any eq www 10.31.11.240/32 
+  1170 permit tcp any eq 443 10.31.11.240/32 
+  1180 permit ip any 10.31.11.0/24 
+  1190 permit ip any 10.31.6.0/24 
+  1200 deny ip any any log 
+ip access-list WWC-VOIP-VLAN185
+  1 permit udp 10.31.44.80/32 10.31.23.0/25 eq snmp 
+  2 permit udp 10.31.44.80/32 10.31.23.0/25 eq syslog 
+  10 permit ip 10.18.86.0/24 10.31.23.0/25 
+  20 permit ip 151.188.247.64/26 10.31.23.0/25 
+  30 permit tcp 10.2.2.0/24 10.31.23.0/25 eq ftp 
+  35 permit tcp 10.10.96.74/32 10.31.23.0/25 eq ftp 
+  36 permit tcp 10.10.96.75/32 10.31.23.0/25 eq ftp 
+  37 permit tcp 10.10.96.77/32 10.31.23.0/25 eq ftp 
+  40 deny tcp any 10.31.23.0/25 eq ftp 
+  45 permit tcp 10.31.48.73/32 10.31.23.0/25 eq 22 
+  50 permit tcp 151.188.247.64/26 10.31.23.0/25 eq 22 
+  60 permit tcp 10.2.2.0/24 10.31.23.0/25 eq 22 
+  65 permit tcp 10.10.96.74/32 10.31.23.0/25 eq 22 
+  66 permit tcp 10.10.96.75/32 10.31.23.0/25 eq 22 
+  67 permit tcp 10.10.96.77/32 10.31.23.0/25 eq 22 
+  70 permit tcp any 10.31.23.19/32 eq 22 
+  80 deny tcp any 10.31.23.0/25 eq 22 
+  90 permit ip any 10.31.23.0/25 
+ip access-list WWC-VOIP-VLAN186
+  1 permit tcp 10.31.48.73/32 10.31.23.171/32 eq www 
+  2 permit tcp 10.31.48.73/32 10.31.23.172/32 eq www 
+  3 permit tcp 10.31.48.73/32 10.31.23.173/32 eq www 
+  4 permit tcp 10.31.48.73/32 10.31.23.174/32 eq www 
+  5 permit tcp 10.31.48.73/32 10.31.23.171/32 eq 443 
+  6 permit tcp 10.31.48.73/32 10.31.23.172/32 eq 443 
+  7 permit tcp 10.31.48.73/32 10.31.23.173/32 eq 443 
+  8 permit tcp 10.31.48.73/32 10.31.23.174/32 eq 443 
+  10 permit ip 10.18.86.0/24 10.31.23.128/26 
+  20 permit tcp 151.188.247.64/26 10.31.23.171/32 eq www 
+  30 permit tcp 10.2.2.0/24 10.31.23.171/32 eq www 
+  35 permit tcp 10.10.96.74/32 10.31.23.171/32 eq www 
+  36 permit tcp 10.10.96.75/32 10.31.23.171/32 eq www 
+  37 permit tcp 10.10.96.77/32 10.31.23.171/32 eq www 
+  40 permit tcp 151.188.247.64/26 10.31.23.172/32 eq www 
+  50 permit tcp 10.2.2.0/24 10.31.23.172/32 eq www 
+  55 permit tcp 10.10.96.74/32 10.31.23.172/32 eq www 
+  56 permit tcp 10.10.96.75/32 10.31.23.172/32 eq www 
+  57 permit tcp 10.10.96.77/32 10.31.23.172/32 eq www 
+  60 permit tcp 151.188.247.64/26 10.31.23.173/32 eq www 
+  70 permit tcp 10.2.2.0/24 10.31.23.173/32 eq www 
+  75 permit tcp 10.10.96.74/32 10.31.23.173/32 eq www 
+  76 permit tcp 10.10.96.75/32 10.31.23.173/32 eq www 
+  77 permit tcp 10.10.96.77/32 10.31.23.173/32 eq www 
+  80 permit tcp 151.188.247.64/26 10.31.23.174/32 eq www 
+  90 permit tcp 10.2.2.0/24 10.31.23.174/32 eq www 
+  95 permit tcp 10.10.96.74/32 10.31.23.174/32 eq www 
+  96 permit tcp 10.10.96.75/32 10.31.23.174/32 eq www 
+  97 permit tcp 10.10.96.77/32 10.31.23.174/32 eq www 
+  100 deny tcp any 10.31.23.171/32 eq www 
+  110 deny tcp any 10.31.23.172/32 eq www 
+  120 deny tcp any 10.31.23.173/32 eq www 
+  130 deny tcp any 10.31.23.174/32 eq www 
+  140 permit tcp 151.188.247.64/26 10.31.23.171/32 eq 443 
+  150 permit tcp 10.2.2.0/24 10.31.23.171/32 eq 443 
+  155 permit tcp 10.10.96.74/32 10.31.23.171/32 eq 443 
+  156 permit tcp 10.10.96.75/32 10.31.23.171/32 eq 443 
+  157 permit tcp 10.10.96.77/32 10.31.23.171/32 eq 443 
+  160 permit tcp 151.188.247.64/26 10.31.23.172/32 eq 443 
+  170 permit tcp 10.2.2.0/24 10.31.23.172/32 eq 443 
+  175 permit tcp 10.10.96.74/32 10.31.23.172/32 eq 443 
+  176 permit tcp 10.10.96.75/32 10.31.23.172/32 eq 443 
+  177 permit tcp 10.10.96.77/32 10.31.23.172/32 eq 443 
+  180 permit tcp 151.188.247.64/26 10.31.23.173/32 eq 443 
+  190 permit tcp 10.2.2.0/24 10.31.23.173/32 eq 443 
+  195 permit tcp 10.10.96.74/32 10.31.23.173/32 eq 443 
+  196 permit tcp 10.10.96.75/32 10.31.23.173/32 eq 443 
+  197 permit tcp 10.10.96.77/32 10.31.23.173/32 eq 443 
+  200 permit tcp 151.188.247.64/26 10.31.23.174/32 eq 443 
+  210 permit tcp 10.2.2.0/24 10.31.23.174/32 eq 443 
+  215 permit tcp 10.10.96.74/32 10.31.23.174/32 eq 443 
+  216 permit tcp 10.10.96.75/32 10.31.23.174/32 eq 443 
+  217 permit tcp 10.10.96.77/32 10.31.23.174/32 eq 443 
+  220 deny tcp any 10.31.23.171/32 eq 443 
+  230 deny tcp any 10.31.23.172/32 eq 443 
+  240 deny tcp any 10.31.23.173/32 eq 443 
+  250 deny tcp any 10.31.23.174/32 eq 443 
+  260 permit ip any 10.31.23.128/26 
+ip access-list WWC-VOIP-VLAN187
+  10 permit tcp 151.188.247.64/26 10.31.23.192/27 eq 22 
+  20 permit tcp 10.2.2.0/24 10.31.23.192/27 eq 22 
+  25 permit tcp 10.10.96.74/32 10.31.23.192/27 eq 22 
+  26 permit tcp 10.10.96.75/32 10.31.23.192/27 eq 22 
+  27 permit tcp 10.10.96.77/32 10.31.23.192/27 eq 22 
+  30 permit tcp 10.31.48.16/32 10.31.23.192/27 eq 22 
+  40 permit tcp 10.31.46.100/32 10.31.23.192/27 eq 22 
+  50 deny tcp any 10.31.23.192/27 eq 22 
+  60 permit ip any 10.31.23.192/27 
+ip access-list block-rdp
+  10 permit tcp any any eq 3389 log 
+  20 permit udp any any eq 3389 log 
+  30 permit ip any any 
+ip access-list hp-support-out
+  10 permit udp any eq domain 10.31.55.5/32 
+  20 permit tcp any eq domain 10.31.55.5/32 
+  30 deny tcp any 10.31.55.5/32 eq 135 
+  40 deny udp any 10.31.55.5/32 eq netbios-ns 
+  50 deny udp any 10.31.55.5/32 eq netbios-dgm 
+  60 deny udp any 10.31.55.5/32 eq netbios-ss 
+  70 deny tcp any 10.31.55.5/32 eq 139 
+  80 deny tcp any 10.31.55.5/32 eq 445 
+  90 deny tcp any 10.31.55.5/32 eq 2745 
+  100 permit tcp 15.224.9.9/32 eq www 10.31.55.5/32 
+  110 permit tcp 15.224.9.9/32 eq 443 10.31.55.5/32 
+  120 permit tcp 15.224.0.0/16 eq smtp 10.31.55.5/32 
+  130 permit ip any any 
+ip access-list infectednodes
+  10 permit ip any any 
+ip access-list interscan
+  10 permit tcp any 151.188.18.16/28 eq smtp 
+  20 permit tcp any eq smtp 151.188.18.16/28 
+  30 permit tcp any 151.188.18.22/32 eq www 
+  40 permit tcp any eq www 151.188.18.16/28 gt 1024 established 
+  50 permit tcp any eq 443 151.188.18.16/28 gt 1024 established 
+  60 permit tcp 66.179.104.132/32 151.188.18.21/32 eq 20022 
+  61 permit ip 151.188.18.16/28 151.188.7.0/25 
+  70 permit ip 10.0.0.0/9 151.188.18.16/28 
+  80 permit ip 151.188.0.0/16 151.188.18.16/28 
+  90 deny ip any 151.188.18.16/28 
+ip access-list local-multicast-rp
+  10 deny ip 224.0.1.39/32 any 
+  20 deny ip 224.0.1.40/32 any 
+  30 deny ip 239.193.0.0/16 any 
+  40 permit ip any any 
+ip access-list vlan10
+  statistics per-entry
+  4 permit tcp 10.31.42.53/32 eq smtp 151.188.1.15/32 
+  5 permit icmp any 151.188.1.15/32 
+  6 permit udp any eq snmp 151.188.1.15/32 
+  9 permit tcp 10.31.49.78/32 151.188.1.15/32 eq www 
+  10 permit ip 151.188.247.64/26 151.188.1.15/32 
+  20 deny ip any 151.188.1.15/32 
+  40 permit ip any any 
+ip access-list vlan19
+  10 permit tcp 151.188.247.64/26 10.31.42.200/32 eq 10443 
+  20 permit tcp 151.188.77.120/32 10.31.42.200/32 eq 10443 
+  30 permit tcp 10.18.64.242/32 10.31.42.200/32 eq 10443 
+  40 permit tcp 10.18.64.66/32 10.31.42.200/32 eq 10443 
+  50 deny tcp any 10.31.42.200/32 eq 10443 
+  60 permit tcp 151.188.247.64/26 10.31.42.200/32 eq 443 
+  70 permit tcp 151.188.77.120/32 10.31.42.200/32 eq 443 
+  80 permit tcp 10.18.64.242/32 10.31.42.200/32 eq 443 
+  90 permit tcp 10.18.64.66/32 10.31.42.200/32 eq 443 
+  100 deny tcp any 10.31.42.200/32 eq 443 
+  110 permit ip any any 
+ip access-list vlan404
+  10 deny ip any 10.31.44.222/32 
+  20 deny ip any 10.31.44.223/32 
+  30 deny ip any 10.31.44.224/32 
+  40 deny ip any 10.31.44.225/32 
+  50 deny tcp any any eq 3389 
+  60 deny udp any any eq 3389 
+  70 permit ip any any 
+class-map type qos match-any VOIPMEDIA
+  match dscp 46
+class-map type qos match-any VOIPSIGNALING
+  match dscp 24
+snmp-server contact NMS@fcps.edu 703-329-7575
+snmp-server location WiltonWood Center NOC
+snmp-server user admin vdc-admin auth md5 0x58c3c8712e0bd77093b5209ba168ab33 priv 0x58c3c8712e0bd77093b5209ba168ab33 localizedkey
+snmp-server host 10.31.44.80 traps version 1 all4one
+snmp-server host 10.31.44.80 source-interface mgmt0
+rmon event 1 log trap public description FATAL(1) owner PMON@FATAL
+rmon event 2 log trap public description CRITICAL(2) owner PMON@CRITICAL
+rmon event 3 log trap public description ERROR(3) owner PMON@ERROR
+rmon event 4 log trap public description WARNING(4) owner PMON@WARNING
+rmon event 5 log trap public description INFORMATION(5) owner PMON@INFO
+snmp-server enable traps switchfabric fabric-crc
+snmp-server enable traps callhome event-notify
+snmp-server enable traps callhome smtp-send-fail
+snmp-server enable traps cfs state-change-notif
+snmp-server enable traps cfs merge-failure
+snmp-server enable traps aaa server-state-change
+snmp-server enable traps hsrp state-change
+snmp-server enable traps feature-control FeatureOpStatusChange
+snmp-server enable traps sysmgr cseFailSwCoreNotifyExtended
+snmp-server enable traps config ccmCLIRunningConfigChanged
+snmp-server enable traps snmp authentication
+snmp-server enable traps link cisco-xcvr-mon-status-chg
+snmp-server enable traps vtp notifs
+snmp-server enable traps vtp vlancreate
+snmp-server enable traps vtp vlandelete
+snmp-server enable traps bridge newroot
+snmp-server enable traps bridge topologychange
+snmp-server enable traps stpx inconsistency
+snmp-server enable traps stpx root-inconsistency
+snmp-server enable traps stpx loop-inconsistency
+snmp-server enable traps system Clock-change-notification
+snmp-server enable traps vtp notifs
+snmp-server community fcpsprivate group vdc-operator
+snmp-server community all4one group vdc-operator
+snmp-server community all4one use-ipv4acl 12
+ntp distribute
+ntp server 10.10.96.30 use-vrf management
+ntp server 151.188.247.70 prefer use-vrf management
+ntp commit 
+aaa authentication login default group fcps 
+aaa accounting default group fcps 
+aaa authentication login error-enable 
+
+ip route 10.5.192.0/19 10.31.100.2
+ip route 10.7.0.61/32 151.188.6.33
+ip route 10.7.0.252/30 151.188.6.33
+ip route 10.31.2.163/32 10.31.25.35
+ip route 10.31.8.0/23 10.31.161.130
+ip route 10.31.16.0/22 10.31.100.2
+ip route 10.31.22.0/24 10.31.1.17
+ip route 10.31.25.1/32 10.31.25.33
+ip route 10.31.32.0/26 10.31.2.65
+ip route 10.31.53.5/32 10.31.48.3
+ip route 10.31.58.0/24 10.31.49.32
+ip route 10.31.59.0/24 10.31.200.254
+ip route 10.31.60.0/24 10.31.200.254
+ip route 10.31.100.8/29 10.31.100.2
+ip route 10.31.100.16/28 10.31.100.2
+ip route 10.31.100.32/28 10.31.100.2
+ip route 10.31.100.48/28 10.31.100.2
+ip route 10.31.100.64/28 10.31.100.2
+ip route 10.31.100.128/30 10.31.100.2
+ip route 10.31.100.160/27 10.31.100.2
+ip route 10.31.100.192/27 10.31.100.2
+ip route 10.31.100.224/29 10.31.100.2
+ip route 10.31.101.0/24 10.31.100.2
+ip route 10.31.200.0/27 10.31.200.254
+ip route 10.31.200.32/27 10.31.200.254
+ip route 10.31.200.64/26 10.31.200.254
+ip route 10.44.192.0/24 10.31.48.7
+ip route 10.60.160.0/24 10.31.48.7
+ip route 10.72.0.189/32 10.31.48.7
+ip route 10.77.32.0/19 10.31.48.7
+ip route 10.128.0.0/9 151.188.6.33
+ip route 10.154.17.0/24 10.31.48.8
+ip route 10.154.18.0/24 10.31.48.8
+ip route 151.188.6.80/28 10.31.25.33
+ip route 151.188.9.0/24 10.31.161.130
+ip route 151.188.24.192/26 151.188.24.130
+ip route 151.188.250.254/32 151.188.6.33
+ip route 166.94.0.0/16 151.188.6.33
+ip route 172.17.16.0/20 10.31.48.8
+ip route 172.17.32.0/20 10.31.48.8
+ip route 172.18.0.0/16 10.7.0.6
+ip route 172.31.48.0/20 10.31.48.8
+ip route 192.131.107.0/25 10.31.48.7
+ip pim rp-address 10.7.0.1 group-list 239.193.0.0/16
+ip pim rp-address 10.31.1.9 group-list 224.0.0.0/4
+ip pim rp-address 10.31.1.9 group-list 224.77.0.0/16
+ip pim ssm range 232.0.0.0/8
+ip pim auto-rp forward
+
+spanning-tree vlan 1-3967 priority 4096
+route-map redir-to-FGC permit 10
+  match ip address 100 
+  set ip next-hop 10.31.129.1 
+route-map static-to-ospf permit 10
+  match ip address 5 
+  set metric 6220 
+route-map test permit 10
+  match ip address 5 
+  set metric 6220 
+route-map test deny 20
+route-map test1 permit 10
+  set metric 6220 
+ip dhcp snooping
+service dhcp
+ip dhcp relay
+ip dhcp relay information option
+ipv6 dhcp relay
+vrf context management
+  ip route 0.0.0.0/0 10.31.11.247
+vpc domain 10
+  peer-keepalive destination 192.168.100.2 source 192.168.100.1 vrf default
+  peer-gateway
+  ip arp synchronize
+
+cfs eth distribute
+
+
+interface mgmt0
+  ip access-group 12 in
+  vrf member management
+  ip address 10.31.11.224/24
+
+interface Vlan1
+  no ip redirects
+  no ipv6 redirects
+
+interface Vlan9
+  description For SASI/HR
+  no shutdown
+  no ip redirects
+  ip address 151.188.4.253/24
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 9 
+    preempt 
+    priority 110
+    ip 151.188.4.247
+
+interface Vlan10
+  description Subnet 1 and Subnet 10
+  no shutdown
+  ip access-group vlan10 out
+  no ip redirects
+  ip address 151.188.1.245/24
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  ip pim sparse-mode
+  hsrp version 2
+  hsrp 10 
+    preempt 
+    priority 110
+    ip 151.188.1.247
+
+interface Vlan11
+  description nms-mgmt
+  no shutdown
+  ip access-group Vlan11-acl out
+  no ip redirects
+  ip address 10.31.11.253/24
+  ip address 10.31.6.253/24 secondary
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 6 
+    preempt 
+    priority 110
+    ip 10.31.6.247
+  hsrp 11 
+    preempt 
+    priority 110
+    ip 10.31.11.247
+
+interface Vlan12
+  description Servers-2
+  no shutdown
+  no ip redirects
+  ip address 10.31.12.2/22
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 12 
+    preempt 
+    priority 110
+    ip 10.31.12.1
+
+interface Vlan14
+  description New HR FW
+  no shutdown
+  no ip redirects
+  ip address 10.31.161.185/26
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 14 
+    preempt 
+    priority 110
+    ip 10.31.161.129
+
+interface Vlan15
+  description Servers
+  no shutdown
+  no ip redirects
+  ip address 10.31.48.4/23
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 15 
+    preempt 
+    priority 110
+    ip 10.31.48.1
+
+interface Vlan16
+  description NOC-Servers
+  no shutdown
+  no ip redirects
+  ip address 10.31.46.2/24
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 16 
+    preempt 
+    priority 110
+    ip 10.31.46.1
+
+interface Vlan17
+  description NOC-Servers
+  no shutdown
+  no ip redirects
+  ip address 10.31.47.2/24
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  ip pim sparse-mode
+  hsrp version 2
+  hsrp 17 
+    preempt 
+    priority 110
+    ip 10.31.47.1
+
+interface Vlan18
+  description NOC-Servers-2
+  no shutdown
+  no ip redirects
+  ip address 10.31.44.250/24
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 18 
+    preempt 
+    priority 110
+    ip 10.31.44.1
+
+interface Vlan19
+  description OTV-Virtual-Machines
+  no shutdown
+  no ip redirects
+  ip address 10.31.43.253/23
+  ip unreachables
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  ip pim sparse-mode
+  hsrp 19 
+    preempt 
+    priority 110 forwarding-threshold lower 0 upper 110
+    ip 10.31.42.1
+
+interface Vlan24
+  description Techlab Subnet
+  no shutdown
+  ip access-group infectednodes in
+  no ip redirects
+  ip address 10.31.100.1/29
+  ip address 151.188.24.129/27 secondary
+  no ipv6 redirects
+
+interface Vlan26
+  description New NOC VLAN 26
+  no shutdown
+  no ip redirects
+  ip address 10.31.26.2/24
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 26 
+    preempt 
+    priority 110
+    ip 10.31.26.1
+
+interface Vlan27
+  description New NOC VLAN 27
+  no shutdown
+  no ip redirects
+  ip address 10.31.27.2/24
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 27 
+    preempt 
+    priority 110
+    ip 10.31.27.1
+
+interface Vlan28
+  description VM Servers 2
+  no shutdown
+  no ip redirects
+  ip address 10.31.31.253/22
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  ip pim sparse-mode
+  hsrp 28 
+    preempt 
+    priority 110
+    ip 10.31.28.1
+
+interface Vlan29
+  description NOC Severs ILO
+  no shutdown
+  no ip redirects
+  ip address 10.3.11.250/22
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  ip pim sparse-mode
+  hsrp version 2
+  hsrp 29 
+    preempt 
+    priority 110
+    ip 10.3.8.1
+
+interface Vlan36
+  description for Chris LB
+  no shutdown
+  no ip redirects
+  ip address 10.31.53.13/27
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  ip pim sparse-mode
+  hsrp version 2
+  hsrp 36 
+    preempt 
+    priority 110
+    ip 10.31.53.1
+
+interface Vlan45
+  description External-Seastar-Servers
+  no shutdown
+  no ip redirects
+  ip address 10.31.2.2/27
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 45 
+    preempt 
+    priority 110
+    ip 10.31.2.1
+
+interface Vlan46
+  description Internal-Seastar-Servers
+  no shutdown
+  no ip redirects
+  ip address 10.31.2.61/27
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 46 
+    preempt 
+    priority 110
+    ip 10.31.2.33
+
+interface Vlan55
+  description Websense Log Servers
+  no ip redirects
+  ip address 10.31.25.45/28
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  ip pim sparse-mode
+  hsrp version 2
+  hsrp 55 
+    preempt 
+    priority 110
+    ip 10.31.25.34
+
+interface Vlan56
+  description new-LB-Servers-backend
+  no shutdown
+  no ip redirects
+  ip address 10.31.56.2/24
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 56 
+    preempt 
+    priority 110
+    ip 10.31.56.1
+
+interface Vlan60
+  description For EasyVPN server
+  no shutdown
+  no ip redirects
+  ip address 10.3.6.2/24
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 60 
+    preempt 
+    priority 110
+    ip 10.3.6.1
+
+interface Vlan61
+  description OTV VLAN
+  no shutdown
+  no ip redirects
+  ip address 10.31.61.2/24
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp 61 
+    preempt 
+    priority 110 forwarding-threshold lower 0 upper 110
+    ip 10.31.61.1
+
+interface Vlan65
+  description This vlan for testing servers only
+  no shutdown
+  no ip redirects
+  ip address 10.3.5.2/24
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 65 
+    preempt 
+    priority 110
+    ip 10.3.5.1
+
+interface Vlan67
+  description UnixILO
+  no shutdown
+  no ip redirects
+  ip address 10.31.67.253/24
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 67 
+    preempt 
+    priority 110
+    ip 10.31.67.1
+
+interface Vlan72
+  description CISCO-BACKUP-CONTROLLERS
+  no shutdown
+  no ip redirects
+  ip address 10.31.72.2/21
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 72 
+    preempt 
+    priority 110
+    ip 10.31.72.1
+  ip dhcp relay address 151.188.18.186 
+
+interface Vlan74
+  description Fortigate-Internal-Firewall
+  no shutdown
+  no ip redirects
+  ip address 10.31.2.93/27
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 74 
+    preempt 
+    priority 110
+    ip 10.31.2.92
+
+interface Vlan75
+  description Servers
+  no shutdown
+  no ip redirects
+  ip address 151.188.6.77/28
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 75 
+    preempt 
+    priority 110
+    ip 151.188.6.65
+
+interface Vlan80
+  description External link to the County
+  no shutdown
+  no ip redirects
+  ip address 151.188.6.45/28
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 80 
+    preempt 
+    priority 110
+    ip 151.188.6.34
+
+interface Vlan82
+  description ESXi host IP
+  no shutdown
+  no ip redirects
+  ip address 10.31.50.253/24
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  ip pim sparse-mode
+  hsrp version 2
+  hsrp 82 
+    preempt 
+    priority 110
+    ip 10.31.50.1
+
+interface Vlan116
+  description DMZ to InterScan01 and 02
+  no shutdown
+  ip access-group interscan out
+  no ip redirects
+  ip address 151.188.18.29/28
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 116 
+    preempt 
+    priority 110
+    ip 151.188.18.17
+
+interface Vlan185
+  description UCApps
+  no shutdown
+  ip access-group WWC-VOIP-VLAN185 out
+  no ip redirects
+  ip address 10.31.23.125/25
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 185 
+    preempt 
+    priority 110
+    ip 10.31.23.1
+
+interface Vlan186
+  description VOIP MGMT
+  no shutdown
+  ip access-group WWC-VOIP-VLAN186 out
+  no ip redirects
+  ip address 10.31.23.189/26
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 186 
+    preempt 
+    priority 110
+    ip 10.31.23.129
+
+interface Vlan187
+  description Internal VOIP CUBE
+  no shutdown
+  ip access-group WWC-VOIP-VLAN187 out
+  no ip redirects
+  ip address 10.31.23.221/27
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 187 
+    preempt 
+    priority 110
+    ip 10.31.23.193
+
+interface Vlan199
+  description Wireless-mgmt
+  no shutdown
+  no ip redirects
+  ip address 10.1.12.2/24
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 199 
+    preempt 
+    priority 110
+    ip 10.1.12.1
+  ip dhcp relay address 151.188.18.186 
+
+interface Vlan201
+  description fcpssecure-wireless
+  no shutdown
+  no ip redirects
+  ip address 10.24.0.2/22
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 201 
+    preempt 
+    priority 110
+    ip 10.24.0.1
+  ip dhcp relay address 151.188.18.186 
+
+interface Vlan202
+  description FCPS-wireless
+  no shutdown
+  no ip redirects
+  ip address 10.24.4.2/22
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 202 
+    preempt 
+    priority 110
+    ip 10.24.4.1
+  ip dhcp relay address 151.188.18.186 
+
+interface Vlan203
+  description FCPS-Mobile-Wireless
+  no shutdown
+  no ip redirects
+  ip address 10.24.8.2/21
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  ip pim sparse-mode
+  hsrp version 2
+  hsrp 203 
+    preempt 
+    priority 110
+    ip 10.24.8.1
+  ip dhcp relay address 151.188.18.186 
+
+interface Vlan204
+  description FCPS-Mobile-Wireless-BKP
+  no shutdown
+  no ip redirects
+  ip address 10.24.16.2/20
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 204 
+    preempt 
+    priority 110
+    ip 10.24.16.1
+  ip dhcp relay address 151.188.18.186 
+
+interface Vlan207
+  description FCPSMotorola-backup for schools
+  no shutdown
+  no ip redirects
+  ip address 10.24.32.2/24
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 207 
+    preempt 
+    priority 110
+    ip 10.24.32.1
+  ip dhcp relay address 151.188.18.186 
+
+interface Vlan210
+  description Inside Internal Firewall
+  no shutdown
+  no ip redirects
+  ip address 10.31.200.249/29
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 210 
+    preempt 
+    priority 110
+    ip 10.31.200.253
+
+interface Vlan244
+  description WWC Data Center
+  no shutdown
+  no ip redirects
+  ip address 10.31.1.33/27
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 244 
+    preempt 
+    priority 110
+    ip 10.31.1.61
+
+interface Vlan350
+  description HP Support VLan
+  no shutdown
+  ip access-group hp-support-out out
+  no ip redirects
+  ip address 10.31.55.1/24
+  no ipv6 redirects
+
+interface Vlan401
+  description PulseSecure VPN To F5 
+  no shutdown
+  no ip redirects
+  ip address 10.31.1.109/28
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 401 
+    preempt 
+    priority 110
+    ip 10.31.1.105
+
+interface Vlan402
+  description PulseSecure NSS VPN
+  no shutdown
+  no ip redirects
+  ip address 10.2.2.2/24
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 402 
+    preempt 
+    priority 110
+    ip 10.2.2.1
+
+interface Vlan403
+  description PulseSecure FCPS VPN
+  no shutdown
+  no ip redirects
+  ip address 10.6.0.2/16
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 403 
+    preempt 
+    priority 110
+    ip 10.6.0.1
+
+interface Vlan404
+  description None FCPS devices
+  no shutdown
+  ip access-group vlan404 in
+  no ip redirects
+  ip address 10.3.47.253/20
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 404 
+    preempt 
+    priority 110
+    ip 10.3.32.1
+
+interface Vlan405
+  description HRPayrollVPNUsers
+  no shutdown
+  no ip redirects
+  ip address 10.2.4.253/24
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  ip pim sparse-mode
+  hsrp version 2
+  hsrp 405 
+    preempt 
+    priority 110
+    ip 10.2.4.1
+
+interface Vlan410
+  description NMS Test VPN 1
+  no shutdown
+  no ip redirects
+  ip address 10.2.3.2/26
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  ip pim sparse-mode
+  hsrp version 2
+  hsrp 410 
+    preempt 
+    priority 110
+    ip 10.2.3.1
+
+interface Vlan411
+  description NMS Test VPN 2
+  no shutdown
+  no ip redirects
+  ip address 10.2.3.66/26
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  ip pim sparse-mode
+  hsrp version 2
+  hsrp 411 
+    preempt 
+    priority 110
+    ip 10.2.3.65
+
+interface Vlan504
+  description CL-Project
+  no shutdown
+  no ip redirects
+  ip address 10.31.5.253/23
+  no ipv6 redirects
+  ip ospf passive-interface
+  ip router ospf 100 area 0.0.0.0
+  hsrp version 2
+  hsrp 504 
+    preempt 
+    priority 110
+    ip 10.31.4.1
+
+interface port-channel100
+  description L2-Out-LF207-LF208
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 100
+
+interface port-channel200
+  description VPC Peer-Link
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  vpc peer-link
+
+interface port-channel201
+  description VPC Peer-keepalive
+  ip address 192.168.100.1/30
+
+interface port-channel210
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 19,25,28,61
+  mtu 9216
+  vpc 210
+
+interface port-channel220
+  description To SAN AF700 A
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 16-18
+  mtu 9216
+
+interface port-channel230
+  description To SAN FAS8200 B
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 16-18
+  mtu 9216
+
+interface port-channel409
+  description WWC-NX93180-G07
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 409
+
+interface port-channel411
+  description WWC-NX93180-H02
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 411
+
+interface port-channel503
+  description WWC-NX93180-A03
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 503
+
+interface port-channel505
+  description WWC-NX93180-A01
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 505
+
+interface port-channel506
+  description WWC-NX93180-A02
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 506
+
+interface port-channel512
+  description WWC-NX93180-A05
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 512
+
+interface port-channel513
+  description WWC-NX93180-A06
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 513
+
+interface port-channel514
+  description WWC-NX93180-A04
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 514
+
+interface port-channel521
+  description WWC-NX93180-A09-1
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 521
+
+interface port-channel532
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  vpc 532
+
+interface port-channel533
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  vpc 533
+
+interface port-channel534
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  vpc 534
+
+interface port-channel535
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 535
+
+interface port-channel538
+  description WWC-NX93180-A08
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 538
+
+interface port-channel539
+  description WWC-NX93180-D04
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 539
+
+interface port-channel540
+  description WWC-NX93180-D05
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 540
+
+interface port-channel541
+  description WWC-NX93180-D10
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 541
+
+interface port-channel546
+  description WWC-NX93180-G01
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 546
+
+interface port-channel565
+  description WWC-NX93180-A13
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 565
+
+interface port-channel574
+  description WWC-NX93180-A14
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 574
+
+interface port-channel575
+  description WWC-NX93180-A10
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 575
+
+interface port-channel578
+  description WWC-NX93180-B02
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 578
+
+interface port-channel579
+  description WWC-NX93180-B03
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 579
+
+interface port-channel580
+  description WWC-NX93180-B04
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 580
+
+interface port-channel581
+  description WWC-NX93180-B05
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 581
+
+interface port-channel582
+  description WWC-NX93180-B06
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 582
+
+interface port-channel583
+  description WWC-NX93180-B07
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 583
+
+interface port-channel585
+  description WWC-NX93180-B11
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 585
+
+interface port-channel586
+  description WWC-NX93180-B09
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 586
+
+interface port-channel587
+  description WWC-NX93180-B12
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 587
+
+interface port-channel589
+  description WWC-NX93180-D01
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 589
+
+interface port-channel595
+  description WWC-NX93180-H07
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 11,305
+  spanning-tree port type normal
+  mtu 9216
+  vpc 595
+
+interface port-channel598
+  description WWC-NX93180-B10
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 598
+
+interface port-channel599
+  description WWC-NX93180-D02
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 599
+
+interface port-channel602
+  description WWC-NX93180-E01
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 602
+
+interface port-channel604
+  description WWC-NX93180-E03
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 604
+
+interface port-channel608
+  description WWC-NX5548-NetApps01 
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+
+interface port-channel610
+  description WWC-NX93180-E04
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 610
+
+interface port-channel611
+  description WWC-NX93180-E05
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 611
+
+interface port-channel612
+  description WWC-NX93180-E06
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 612
+
+interface port-channel613
+  description WWC-NX93180-E07
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 613
+
+interface port-channel621
+  description WWC-NX93180-E10
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 621
+
+interface port-channel622
+  description WWC-NX93180-G02
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 622
+
+interface port-channel623
+  description WWC-NX93180-G04
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  vpc 623
+
+interface port-channel628
+  description WWC-NX93180-F01
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 628
+
+interface port-channel629
+  description WWC-NX93180-F02
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 629
+
+interface port-channel636
+  description WWC-NX93180-F03
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 636
+
+interface port-channel642
+  description WWC-NX93180-B08
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 642
+
+interface port-channel643
+  description WWC-NX93180-D03
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 643
+
+interface port-channel644
+  description WWC-NX93180-E02
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 644
+
+interface port-channel645
+  description WWC-NX93180-E08
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 645
+
+interface port-channel646
+  description WWC-NX93180-I08
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 646
+
+interface port-channel649
+  description WWC-NX93180-H01
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 649
+
+interface port-channel650
+  description WWC-NX93180-H06
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  vpc 650
+
+interface Ethernet1/1
+  description to WWC-NX5548-HP34 
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  channel-group 534 mode active
+  no shutdown
+
+interface Ethernet1/2
+  description WWC-NX93180-H07 1/53
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 11,305
+  spanning-tree port type network
+  mtu 9216
+  channel-group 595 mode active
+  no shutdown
+
+interface Ethernet1/3
+  description WWC-NX93180-A01
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 505 mode active
+  no shutdown
+
+interface Ethernet1/4
+  description WWC-NX93180-A02
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 506 mode active
+  no shutdown
+
+interface Ethernet1/5
+  description WWC-NX93180-A03
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 503 mode active
+  no shutdown
+
+interface Ethernet1/6
+  description WWC-NX93180-A04
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 514 mode active
+  no shutdown
+
+interface Ethernet1/7
+  description WWC-NX93180-A08
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 538 mode active
+
+interface Ethernet1/8
+  description WWC-NX93180-A09-1
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 521 mode active
+
+interface Ethernet1/9
+
+interface Ethernet1/10
+  description WWC-NX93180-A10
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 575 mode active
+  no shutdown
+
+interface Ethernet1/11
+
+interface Ethernet1/12
+
+interface Ethernet1/13
+  description WWC-93180-IBGP- Internal-service-bkup
+  no ip redirects
+  ip address 10.31.0.101/30
+  ip ospf cost 1000
+  ip ospf network point-to-point
+  no shutdown
+
+interface Ethernet1/14
+  description WWC-NX93180-A13
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 565 mode active
+  no shutdown
+
+interface Ethernet1/15
+  description WWC-NX93180-A14
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 574 mode active
+  no shutdown
+
+interface Ethernet1/16
+  description LF207-A-11-Top-E1/49
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 100 mode active
+  no shutdown
+
+interface Ethernet1/17
+  description LF208-A-11-Bottom-E1/50
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 100 mode active
+  no shutdown
+
+interface Ethernet1/18
+  description test
+
+interface Ethernet1/19
+  description AFFA700 SAN 1 A port A4
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 16-18
+  mtu 9216
+  channel-group 220 mode active
+  no shutdown
+
+interface Ethernet1/20
+  description WWC-NX93180-A05
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  channel-group 512 mode active
+  no shutdown
+
+interface Ethernet1/21
+  description WWC-NX93180-A06
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  channel-group 513 mode active
+  no shutdown
+
+interface Ethernet1/22
+  description PO 200-mbr
+  switchport
+  switchport mode trunk
+  channel-group 200 mode active
+  no shutdown
+
+interface Ethernet1/23
+  description RESERVED FOR ACI
+
+interface Ethernet1/24
+
+interface Ethernet2/1
+
+interface Ethernet2/2
+
+interface Ethernet2/3
+  description to WWC-NX5548-HP19 
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/4
+  description to WWC-NX5548-HP17 
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/5
+  description to WWC-NX5010-Netapp04
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/6
+  description WWC-NX5548-Network_Closet_9
+  switchport
+  switchport mode trunk
+  no shutdown
+
+interface Ethernet2/7
+  description to WWC-NX5548-HP11 
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/8
+  description To WWC-NX5548-HP03-A
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/9
+  description to WWC-3560E-SUN04
+  switchport
+  switchport mode trunk
+  no shutdown
+
+interface Ethernet2/10
+  description To Websense_F5 Port 1.14
+  switchport
+  switchport mode trunk
+  switchport access vlan 55
+  no shutdown
+
+interface Ethernet2/11
+  description To WWC-3560E-HP62 
+  switchport
+  switchport mode trunk
+  no shutdown
+
+interface Ethernet2/12
+  description To WWC-3560E-HP63 
+  switchport
+  switchport mode trunk
+  no shutdown
+
+interface Ethernet2/13
+  description to WWC-NX5548-HP49
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/14
+  description to WWC-VOIP_RACK-NX5548-1
+  switchport
+  switchport mode trunk
+  no shutdown
+
+interface Ethernet2/15
+  description to Scrutinizer Flowpro
+  switchport
+  switchport mode trunk
+  switchport monitor
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/16
+  description to WWC-NX5548-HP61
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/17
+  description To-WWC-NX5548-HP54 
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/18
+  description to WWC-NX5548-HP60
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/19
+  description to WWC-NX5548-HP36 
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+
+interface Ethernet2/20
+  description to WWC-NX5548-HP32 
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/21
+  description to WWC-NX5548-HP47
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/22
+  description to WWC-NX5548-HP29
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/23
+  description to WWC-NX5548-HP58
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/24
+  description to WWC-NX5548-HP56
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/25
+  description to WWC-3560E-Netapp2
+  switchport
+  switchport mode trunk
+  no shutdown
+
+interface Ethernet2/26
+  description to WWC-NX5548-HP23
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/27
+  description to WWC-NX5548-HP25
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/28
+  description to WWC-NX5548-HP27
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/29
+  description to WWC-NX5548-HP62
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/30
+  description WWC-NX5548-HP20
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/31
+  description to WWC-NX5548-HP18
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/32
+  description to WWC-NX5548-SUN07
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/33
+  description WWC-NX5548-NC1
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/34
+  description WWC-NX5010-TLSCORE
+  switchport
+  switchport access vlan 521
+  spanning-tree port type edge
+  speed 10000
+  no shutdown
+
+interface Ethernet2/35
+  description WWC-NX5548-A10
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/36
+  description WWC-NX5548-HP10
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/37
+  description WWC-NX5548-HP39
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/38
+  description WWC-NX5548-HP02
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/39
+  description WWC-NX5548-SUN04
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/40
+  description WWC-NX5548-SUN06
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/41
+  description to WWC-NX5548-F07 
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/42
+  description to WWC-NX5548-A13
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/43
+  description WWC-NX5548-HP24
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/44
+  description WWC-NX5548-HP16
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/45
+  description WWC-NX5548-NetApps01
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/46
+  description WWC-NX5548-HP46
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/47
+  description WWC-NX5548-HP50A(.5)
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet2/48
+  description PO 201-mbr
+  channel-group 201 mode active
+  no shutdown
+
+interface Ethernet3/1
+  description to WWC-NX5548-HP32 
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  channel-group 532 mode active
+  no shutdown
+
+interface Ethernet3/2
+  description WWC-NX93180-B02
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 578 mode active
+
+interface Ethernet3/3
+  description WWC-NX93180-B03
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 579 mode active
+  no shutdown
+
+interface Ethernet3/4
+  description WWC-NX93180-B04
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 580 mode active
+
+interface Ethernet3/5
+  description WWC-NX93180-B05
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 581 mode active
+
+interface Ethernet3/6
+  description WWC-NX93180-B06
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 582 mode active
+
+interface Ethernet3/7
+  description WWC-NX93180-B07
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 583 mode active
+
+interface Ethernet3/8
+  description WWC-NX93180-B08
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 642 mode active
+
+interface Ethernet3/9
+  description WWC-NX93180-B09
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 586 mode active
+  no shutdown
+
+interface Ethernet3/10
+  description WWC-NX93180-B10
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 598 mode active
+  no shutdown
+
+interface Ethernet3/11
+  description WWC-NX93180-B11
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 585 mode active
+
+interface Ethernet3/12
+  description WWC-NX93180-B12
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 587 mode active
+  no shutdown
+
+interface Ethernet3/13
+  description WWC-NX93180-D01
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 589 mode active
+
+interface Ethernet3/14
+  description WWC-NX93180-D02
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 599 mode active
+
+interface Ethernet3/15
+  description WWC-NX93180-D03
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 643 mode active
+
+interface Ethernet3/16
+  description WWC-NX93180-D04
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 539 mode active
+
+interface Ethernet3/17
+  description WWC-NX93180-D05
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 540 mode active
+
+interface Ethernet3/18
+  description WWC-NX93180-D10
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 541 mode active
+  no shutdown
+
+interface Ethernet3/19
+  description AFFA SAN 1 A port A8
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 16-18
+  mtu 9216
+  channel-group 220 mode active
+  no shutdown
+
+interface Ethernet3/20
+
+interface Ethernet3/21
+
+interface Ethernet3/22
+  description PO 200-mbr
+  switchport
+  switchport mode trunk
+  channel-group 200 mode active
+  no shutdown
+
+interface Ethernet3/23
+
+interface Ethernet3/24
+  description WWC-NX93180-E01
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 602 mode active
+  no shutdown
+
+interface Ethernet4/1
+  description to WWC-NX5548-HP07
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/2
+  description to WWC-NX5548-HP13
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/3
+  description to WWC-NX5548-HP01
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/4
+  description TO-WWC-NX5548-HP15
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/5
+  description WWC-NX5548-F06
+  switchport
+  switchport mode trunk
+  no shutdown
+
+interface Ethernet4/6
+  description To WWC-NX5548-HP03-B
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/7
+  description To WWC-NX5548-F05-1
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/8
+  description To WWC-NX5548-F05-2
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/9
+  description To WWC-NX5548-F04
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/10
+  description To WWC-NX5548-F01-2
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/11
+  description to WWC-NX5548-HP50.25
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/12
+  description WWC-NX5548-HP37
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/13
+  description WWC-NX5548-D01
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/14
+  description WWC-OOBMGMT-NX5548-B04
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/15
+  description WWC-NX5548-HP53
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/16
+  description WWC-NX5548-HP55
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/17
+  description WWC-NX5548-HP57
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/18
+  description WWC-NX5548-HP52
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+
+interface Ethernet4/19
+  description WWC-NX5548-HP59
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/20
+  description WWC-NX5548-HP31
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/21
+  description WWC-NX5548-HP33
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/22
+  description WWC-NX5548-HP35
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/23
+  description WWC-NX5548-HP48
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/24
+  description WWC-NX5548-HP63
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/25
+  description WWC-NX5548-HP26
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/26
+  description WWC-NX5548-B03
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/27
+  description WWC-NX5548-HP30
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/28
+  description WWC-NX5548-HP04
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/29
+  description WWC-NX5548-Netapp08
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/30
+  description To WWC-NX5548-F04-2
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/31
+  description WWC-NX5548-HP08-2
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/32
+  description WWC-NX5548-HP08
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/33
+  description to WWC-VOICE_RACK-NX5548-2
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/34
+  description To WWC-NX5548-F02
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/35
+  description To WWC-NX5548-F03
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/36
+  description To WWC-NX5548-F01
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  no shutdown
+
+interface Ethernet4/37
+  no shutdown
+
+interface Ethernet4/38
+
+interface Ethernet4/39
+  description Trunk to Internal-FW
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 59,210-211,215,222,260
+  no shutdown
+
+interface Ethernet4/40
+  description To WWC-ADMIN T1/1 (151.188.18.185/29)
+  no ip redirects
+  no shutdown
+
+interface Ethernet4/41
+
+interface Ethernet4/42
+
+interface Ethernet4/43
+
+interface Ethernet4/44
+
+interface Ethernet4/45
+  description WWC-NX5548-NetApps01
+  switchport
+  switchport mode trunk
+
+interface Ethernet4/46
+
+interface Ethernet4/47
+
+interface Ethernet4/48
+  description PO 201-mbr
+  channel-group 201 mode active
+  no shutdown
+
+interface Ethernet7/1
+  description to I-WWC-ASR9K port Hu0/3/0/0
+  mtu 9202
+  ip address 10.7.0.5/30
+  ip ospf cost 50
+  ip ospf network point-to-point
+  ip pim sparse-mode
+  no shutdown
+
+interface Ethernet7/2
+  description to ASR9906-POP HU0/1/0/1 
+  ip address 10.31.1.18/29
+  ip ospf cost 100
+  ip ospf network point-to-point
+  no shutdown
+
+interface Ethernet7/3
+
+interface Ethernet7/4
+
+interface Ethernet7/5
+
+interface Ethernet7/6
+
+interface Ethernet7/7
+
+interface Ethernet7/8
+
+interface Ethernet7/9
+
+interface Ethernet7/10
+
+interface Ethernet7/11
+
+interface Ethernet7/12
+  description To 7710 B port eth 7/12
+  mtu 9202
+  ip address 10.7.0.13/30
+  ip ospf cost 100
+  ip ospf network point-to-point
+  ip pim sparse-mode
+  no shutdown
+
+interface Ethernet8/1
+  description WWC-NX5548-HP33
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  channel-group 533 mode active
+  no shutdown
+
+interface Ethernet8/2
+  description WWC-NX93180-E02
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 644 mode active
+  no shutdown
+
+interface Ethernet8/3
+  description WWC-NX93180-E03
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 604 mode active
+
+interface Ethernet8/4
+  description WWC-NX93180-E04
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 610 mode active
+  no shutdown
+
+interface Ethernet8/5
+  description WWC-NX93180-E05
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 611 mode active
+
+interface Ethernet8/6
+  description WWC-NX93180-E06
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 612 mode active
+
+interface Ethernet8/7
+  description WWC-NX93180-E07
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+
+interface Ethernet8/8
+  description WWC-NX93180-E08
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 645 mode active
+
+interface Ethernet8/9
+
+interface Ethernet8/10
+  description WWC-NX93180-E10
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 621 mode active
+  no shutdown
+
+interface Ethernet8/11
+
+interface Ethernet8/12
+
+interface Ethernet8/13
+  description WWC-NX93180-F01
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 628 mode active
+  no shutdown
+
+interface Ethernet8/14
+  description WWC-NX93180-F02
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 629 mode active
+  no shutdown
+
+interface Ethernet8/15
+  description WWC-NX93180-F03
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 636 mode active
+
+interface Ethernet8/16
+
+interface Ethernet8/17
+
+interface Ethernet8/18
+  description FAS8200-SAN 2 A port 1/0
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 16-18
+  mtu 9216
+  channel-group 230 mode active
+  no shutdown
+
+interface Ethernet8/19
+
+interface Ethernet8/20
+  description WWC-NX93180-G01
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 546 mode active
+  no shutdown
+
+interface Ethernet8/21
+  description WWC-NX93180-G02
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 622 mode active
+  no shutdown
+
+interface Ethernet8/22
+  description PO 200-mbr
+  switchport
+  switchport mode trunk
+  channel-group 200 mode active
+  no shutdown
+
+interface Ethernet8/23
+  description to NX7710-OTV Port E9/23
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 19,25,28,61
+  mtu 9216
+  channel-group 210 mode active
+  no shutdown
+
+interface Ethernet8/24
+  description to NX7710-OTV Port E9/24
+  mtu 9216
+  ip address 10.31.1.69/30
+  ip ospf network point-to-point
+  ip router ospf 100 area 0.0.0.0
+  no shutdown
+
+interface Ethernet9/1
+  description WWC-NX5548-HP35
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 535 mode active
+  no shutdown
+
+interface Ethernet9/2
+  mtu 9216
+
+interface Ethernet9/3
+
+interface Ethernet9/4
+
+interface Ethernet9/5
+  description WWC-NX93180-H01
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  mtu 9216
+  channel-group 649 mode active
+  no shutdown
+
+interface Ethernet9/6
+
+interface Ethernet9/7
+  description WWC-NX93180-H06
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 650 mode active
+
+interface Ethernet9/8
+  description WWC-NX93180-G04
+  switchport
+  switchport mode trunk
+  spanning-tree port type normal
+  channel-group 623 mode active
+  no shutdown
+
+interface Ethernet9/9
+
+interface Ethernet9/10
+  description WWC-NX93180-G07
+  switchport
+  switchport mode trunk
+  spanning-tree port type network
+  mtu 9216
+  channel-group 409 mode active
+  no shutdown
+
+interface Ethernet9/11
+
+interface Ethernet9/12
+
+interface Ethernet9/13
+
+interface Ethernet9/14
+  description WWC-NX93180-H02 10.31.11.11
+  switchport
+  switchport mode trunk
+  mtu 9216
+  channel-group 411 mode active
+  no shutdown
+
+interface Ethernet9/15
+
+interface Ethernet9/16
+
+interface Ethernet9/17
+  description WWC-NX93180-I08
+  switchport
+  switchport mode trunk
+  mtu 9216
+  channel-group 646 mode active
+  no shutdown
+
+interface Ethernet9/18
+  description FAS8200-SAN 2 A port 1/1
+  switchport
+  switchport mode trunk
+  switchport trunk allowed vlan 16-18
+  mtu 9216
+  channel-group 230 mode active
+  no shutdown
+
+interface Ethernet9/19
+
+interface Ethernet9/20
+
+interface loopback0
+  ip address 10.31.1.9/32
+  ip pim sparse-mode
+logging logfile acllog 5
+logging server 10.31.46.99 5 use-vrf management
+logging server 10.31.44.80 5 use-vrf management
+cli alias name wr copy run start
+cli alias name backup copy run tftp:NX7710-DC1-confg
+line console
+  exec-timeout 10
+line vty
+  exec-timeout 10
+router ospf 100
+  network 10.5.201.1/32 area 0.0.0.0
+  network 10.7.0.5/32 area 0.0.0.0
+  network 10.7.0.13/32 area 0.0.0.0
+  network 10.31.0.101/32 area 0.0.0.0
+  network 10.31.1.6/32 area 0.0.0.0
+  network 10.31.1.8/32 area 0.0.0.0
+  network 10.31.1.9/32 area 0.0.0.0
+  network 10.31.1.17/32 area 0.0.0.0
+  network 10.31.1.18/32 area 0.0.0.0
+  network 10.31.1.26/32 area 0.0.0.0
+  network 10.31.1.97/32 area 0.0.0.0
+  network 10.31.1.105/32 area 0.0.0.0
+  network 10.31.100.1/32 area 0.0.0.0
+  network 10.31.167.1/32 area 0.0.0.0
+  network 151.188.6.34/32 area 0.0.0.0
+  network 151.188.18.17/32 area 0.0.0.0
+  network 151.188.24.128/25 area 0.0.0.0
+  network 151.188.247.110/32 area 0.0.0.0
+  redistribute direct route-map static-to-ospf
+  redistribute static route-map static-to-ospf
+  log-adjacency-changes
+hardware ip glean throttle
+hardware ip glean throttle maximum 10000
+monitor session 1 
+  source vlan 15-16,18-19,404 both
+  rate-limit auto
+  destination interface Ethernet2/15
+  no shut
+
+monitor filter siemlog
+  match frame-type ipv4
+  match frame-type ipv4 src-ip 10.31.46.32/32
+  match frame-type ipv4 dest-ip 10.31.46.32/32
+
+monitor filter-list scrutinizer
+  deny filter siemlog   
+  
+
+
+scheduler job name backup-config
+cli var name timestamp $(TIMESTAMP) ;copy running-config tftp://10.31.46.100/$(SWITCHNAME)-cfg.$(timestamp) vrf management
+ 
+end-job
+
+scheduler schedule name monthly-backup
+  job name backup-config
+  time monthly 01:04:00
+
+
+
+

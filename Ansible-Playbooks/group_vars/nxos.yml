@@ -1,0 +1,9 @@
+# ansible_connection: ansible.netcommon.network_cli
+# ansible_network_os: cisco.nxos.nxos
+ansible_user: aaboagye
+ansible_password: C227-a7fa
+ansible_become: false
+ansible_become_method: enable
+ansible_become_password: C227-a7fa
+ansible_ssh_common_args: '-o ProxyCommand="ssh -W %h:%p -q bastion01"'
+

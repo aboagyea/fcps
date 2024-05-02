@@ -1,0 +1,10 @@
+2024-05-02 00:24:57,411 -  nornir.core -     INFO -        run() - Running task 'gather_commands' with args {'commands': ['show version', 'show ip int br', 'show ip arp', 'show platform resources']} on 2 hosts
+2024-05-02 00:25:01,854 -  nornir.core -     INFO -        run() - Running task 'close_connections_task' with args {} on 2 hosts
+2024-05-02 00:27:24,049 -  nornir.core -     INFO -        run() - Running task 'gather_commands' with args {'commands': 'show run int vlan'} on 2 hosts
+2024-05-02 00:27:29,461 -  nornir.core -     INFO -        run() - Running task 'close_connections_task' with args {} on 2 hosts
+2024-05-02 00:28:15,478 -  nornir.core -     INFO -        run() - Running task 'gather_commands' with args {'commands': 'show vlan brief'} on 2 hosts
+2024-05-02 00:28:20,999 -  nornir.core -     INFO -        run() - Running task 'close_connections_task' with args {} on 2 hosts
+2024-05-02 00:29:05,947 -  nornir.core -     INFO -        run() - Running task 'gather_commands' with args {'commands': 'show run'} on 2 hosts
+2024-05-02 00:29:10,260 -  nornir.core -     INFO -        run() - Running task 'close_connections_task' with args {} on 2 hosts
+2024-05-02 00:31:08,108 -  nornir.core -     INFO -        run() - Running task 'gather_commands' with args {'commands': ['show run']} on 2 hosts
+2024-05-02 00:31:12,085 -  nornir.core -     INFO -        run() - Running task 'close_connections_task' with args {} on 2 hosts

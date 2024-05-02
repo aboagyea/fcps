@@ -1,0 +1,10 @@
+
+cisco-nexus:
+  ansible_connection: ansible.netcommon.network_cli
+  ansible_network_os: cisco.nxos.nxos
+  #platform: nx_os
+# iosv:
+#   platform: cisco_ios
+#   connection_options:
+#     scrapli:
+#       platform: cisco_iosxe

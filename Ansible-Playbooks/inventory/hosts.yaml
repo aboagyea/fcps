@@ -1,0 +1,12 @@
+
+NX7710-WWC-DC1:
+  hostname: 10.31.11.253
+  groups:
+    - cisco-nexus
+  data:
+    tags:
+      - distribution
+NX7710B-DC2:
+  hostname: 10.31.11.227
+
+

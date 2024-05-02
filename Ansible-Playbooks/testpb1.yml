@@ -1,0 +1,9 @@
+---
+- name: Testing
+  hosts: all
+
+  gather_facts: no
+  tasks:
+  - name: run show version on remote devices
+    cisco.nxos.nxos_command:
+      commands: show version
