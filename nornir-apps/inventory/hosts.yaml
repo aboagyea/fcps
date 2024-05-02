@@ -1,33 +1,33 @@
-PC1:
-  hostname: 192.168.153.201
-  groups:
-    - hosts
-PC2:
-  hostname: 192.168.153.202
-  groups:
-    - hosts
-PC3:
-  hostname: 192.168.153.203
-  groups:
-    - hosts
-PC4:
-  hostname: 192.168.153.204
-  groups:
-    - hosts
-ASW1:
-  hostname: 192.168.153.101
-  groups:
-    - iosv
-  data:
-    tags:
-      - access
-ASW2:
-  hostname: 192.168.153.102
-  groups:
-    - iosv
-  data:
-    tags:
-      - access
+# PC1:
+#   hostname: 192.168.153.201
+#   groups:
+#     - hosts
+# PC2:
+#   hostname: 192.168.153.202
+#   groups:
+#     - hosts
+# PC3:
+#   hostname: 192.168.153.203
+#   groups:
+#     - hosts
+# PC4:
+#   hostname: 192.168.153.204
+#   groups:
+#     - hosts
+# ASW1:
+#   hostname: 192.168.153.101
+#   groups:
+#     - iosv
+#   data:
+#     tags:
+#       - access
+# ASW2:
+#   hostname: 192.168.153.102
+#   groups:
+#     - iosv
+#   data:
+#     tags:
+#       - access
 NX7710-WWC-DC1:
   hostname: 10.31.11.253
   groups:
@@ -42,17 +42,17 @@ NX7710B-DC2:
   data:
     tags:
       - distribution
-CORE1:
-  hostname: 192.168.153.105
-  groups:
-    - csr
-  data:
-    tags:
-      - core
-EDGE1:
-  hostname: 192.168.153.106
-  groups:
-    - csr
-  data:
-    tags:
-      - edge
+# CORE1:
+#   hostname: 192.168.153.105
+#   groups:
+#     - csr
+#   data:
+#     tags:
+#       - core
+# EDGE1:
+#   hostname: 192.168.153.106
+#   groups:
+#     - csr
+#   data:
+#     tags:
+#       - edge

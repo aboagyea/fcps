@@ -4,9 +4,9 @@ import shutil
 
 from nornir import InitNornir
 
-# from nornir_netmiko.tasks import netmiko_send_command
+from nornir_netmiko.tasks import netmiko_send_command
 # from nornir.core.filter import F
-from nornir_scrapli.tasks import send_command as scrapli_send_command
+# from nornir_scrapli.tasks import send_command as scrapli_send_command
 
 
 COMMANDS = [
@@ -27,9 +27,9 @@ def gather_commands(task, commands):
     with open(file_path, "w") as f:
         for command in commands:
             # gather commands using netmiko
-            # output = task.run(netmiko_send_command, command_string=command)
+            output = task.run(netmiko_send_command, command_string=command)
             # gather commands using scrapli w/ libssh2
-            output = task.run(scrapli_send_command, command=command)
+            # output = task.run(scrapli_send_command, command=command)
             f.write(f"===== {command} ======\n{output.result}\n\n")
 
 

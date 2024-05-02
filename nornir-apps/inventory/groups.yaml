@@ -1,7 +1,7 @@
 hosts:
   platform: linux
 cisco-nexus:
-  platform: nx_os
+  platform: cisco_nxos
 iosv:
   platform: cisco_ios
   connection_options:

@@ -10,6 +10,6 @@ logging:
 inventory:
   plugin: SimpleInventory
   options:
-    host_file: "inventories/inventory-10-csr-local/hosts.yaml"
-    group_file: "inventories/inventory-10-csr-local/groups.yaml"
-    defaults_file: "inventories/inventory-10-csr-local/defaults.yaml"
+    host_file: "inventory/hosts.yaml"
+    group_file: "inventory/groups.yaml"
+    defaults_file: "inventory/defaults.yaml"
