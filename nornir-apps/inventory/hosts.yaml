@@ -2,32 +2,41 @@
 #   hostname: 192.168.153.201
 #   groups:
 #     - hosts
-# PC2:
-#   hostname: 192.168.153.202
-#   groups:
-#     - hosts
-# PC3:
-#   hostname: 192.168.153.203
-#   groups:
-#     - hosts
-# PC4:
-#   hostname: 192.168.153.204
-#   groups:
-#     - hosts
-# ASW1:
-#   hostname: 192.168.153.101
-#   groups:
-#     - iosv
-#   data:
-#     tags:
-#       - access
-# ASW2:
-#   hostname: 192.168.153.102
-#   groups:
-#     - iosv
-#   data:
-#     tags:
-#       - access
+LF207-A-11-Top:
+  hostname: 172.18.40.64
+  groups:
+    - cisco-nexus
+  data:
+    tags:
+      - leaf
+LF208-A-11-Bottom:
+  hostname: 172.18.40.65
+  groups:
+    - cisco-nexus
+  data:
+    tags:
+      - leaf
+SP103-H-04:
+  hostname: 172.18.128.64
+  groups:
+    - cisco-nexus
+  data:
+    tags:
+      - spine
+SP101-G-07:
+  hostname: 172.18.40.66
+  groups:
+    - cisco-nexus
+  data:
+    tags:
+      - spine
+SP102-G-02:
+  hostname: 172.18.32.65
+  groups:
+    - cisco-nexus
+  data:
+    tags:
+      - spine
 NX7710-WWC-DC1:
   hostname: 10.31.11.253
   groups:
