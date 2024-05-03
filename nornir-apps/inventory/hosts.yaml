@@ -3,35 +3,35 @@
 #   groups:
 #     - hosts
 LF207-A-11-Top:
-  hostname: 172.18.40.64
+  hostname: 10.31.6.107
   groups:
     - cisco-nexus
   data:
     tags:
       - leaf
 LF208-A-11-Bottom:
-  hostname: 172.18.40.65
+  hostname: 10.31.6.108
   groups:
     - cisco-nexus
   data:
     tags:
       - leaf
 SP103-H-04:
-  hostname: 172.18.128.64
+  hostname: 10.31.6.23
   groups:
     - cisco-nexus
   data:
     tags:
       - spine
 SP101-G-07:
-  hostname: 172.18.40.66
+  hostname: 10.31.6.21
   groups:
     - cisco-nexus
   data:
     tags:
       - spine
 SP102-G-02:
-  hostname: 172.18.32.65
+  hostname: 10.31.6.22
   groups:
     - cisco-nexus
   data:
